@@ -22,6 +22,6 @@ console.log(car.toString());
 // since all objects inherit from this global object, all of it's methods are avaliable to use
 
 console.log(car.constructor);
-// constructor another property of the Global Object.
+// constructor is another property of the Global Object.
 // will point to the Object constructor function for objects
 // and the Array constructor function for arrays
