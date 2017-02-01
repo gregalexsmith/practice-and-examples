@@ -1,7 +1,9 @@
 #Object Oriented Javascript Examples
 
 Going through Udacity course covering several helpful topics for object oriented javascript.
+
 https://classroom.udacity.com/courses/ud015
+
 These files were build up by following along with the videos and adding further examples and explinations
 
 1. Scope
