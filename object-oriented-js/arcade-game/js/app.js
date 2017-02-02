@@ -1,15 +1,11 @@
-var grid = {
-  col: 101,
-  row: 83
-}
-
 // Enemies our player must avoid
 var Enemy = function() {
-    this.x = -grid.col;
+    //random start x position for spacing the enemys out
+    this.x = (-grid.col) * Math.floor((Math.random() * 3) + 1);
     //random starting row
-    var row = Math.floor((Math.random() * 3) + 1) * 70;
-    this.y = row
-    this.size = 70;
+    var row = Math.floor((Math.random() * 3) + 1) * 83;
+    this.y = row - 20;
+    this.size = 60;
     this.speed = Math.floor(Math.random() * 100) + 100;
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
@@ -36,16 +32,12 @@ Enemy.prototype.update = function(dt) {
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    ctx.beginPath();
-    ctx.arc(this.x + 50, this.y + 100, this.size/2, 0, 2 * Math.PI, false);
-    ctx.fillStyle = 'green';
-    ctx.fill();
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = '#003300';
-    ctx.stroke();
 };
 
+//check for collision with player
+//returns true if collision has occured
 Enemy.prototype.checkForPlayer = function() {
+  //the rendered position of the bug is different from its x/y position
   var renderedPos = {
     x: this.x + 50,
     y: this.y + 100
@@ -57,10 +49,10 @@ Enemy.prototype.checkForPlayer = function() {
   if (dist < this.size) {
     return true;
   }
-  // console.log(dist);
   return false;
 }
 
+//Main player controlled by user
 var Player = function() {
     this.sprite = 'images/char-boy.png';
     this.startPos = {
@@ -76,7 +68,7 @@ var Player = function() {
 
 // Update the player's position on the screen
 Player.prototype.update = function(dt) {
-  //only move when keypress is detected
+  //reset the player if they reach the water
   if (this.y < grid.row/2) {
     this.reset();
   }
@@ -93,12 +85,12 @@ Player.prototype.reset = function() {
   this.y = this.startPos.y
 }
 
-// Handle user input. Update the player postion based on the key
+// Handle user input. Update the player postion based on the key pressed
 Player.prototype.handleInput = function(keyName) {
-  console.log("input");
   switch (keyName) {
     case 'up':
       if (this.y < grid.row - grid.row/2) {
+        //limit reached, don't allow player to move this way anymore
         break;
       }
       this.y = this.y - grid.row;
@@ -135,12 +127,18 @@ var checkCollisions = function() {
   })
 }
 
+//Simple referance for grid size
+var grid = {
+  col: 101,
+  row: 83
+}
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var player = new Player();
 var allEnemies = [];
-for (var i = 0; i < 6; i++) {
+for (var i = 0; i < 8; i++) {
   allEnemies.push(new Enemy());
 }
 
