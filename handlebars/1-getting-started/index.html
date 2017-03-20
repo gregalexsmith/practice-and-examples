@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>1 - Getting Started</title>
+    <script src="../lib/handlebars-v4.0.5.js" charset="utf-8"></script>
+  </head>
+
+  <body>
+    <h1>Getting Started</h1>
+
+    <!-- container -->
+    <div id="container"></div>
+
+    <script type="text/javascript">
+      //create a basic source
+      var source = "<p>My name is {{name}} and I live in {{city}}</p>";
+      // compile into a template
+      var template = Handlebars.compile(source);
+      // execute the template with a context to get HTML result
+      var data = template({name: "Greg", city: "Toronto"});
+      // add result to the DOM
+      document.querySelector('#container').innerHTML += data;
+    </script>
+
+  </body>
+</html>

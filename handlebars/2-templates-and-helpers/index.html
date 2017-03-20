@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>2 - Templates and Helpers</title>
+    <script src="../lib/handlebars-v4.0.5.js" charset="utf-8"></script>
+    <style media="screen">
+      .red-text {color: red}
+      .blue-text {color: blue}
+      .green-text {color: green}
+    </style>
+  </head>
+
+  <body>
+    <h1>Templates and Helpers</h1>
+
+    <div id="container"></div>
+
+    <!-- Add a template to render on the client -->
+    <script id="quote-template" type="text/x-handlebars-template">
+
+      <!-- simple data input -->
+      <h3>Favorite {{name}} Quotes</h3>
+
+      <!-- Iterate though a list of items -->
+      <ol>
+        {{#each quotes}}
+          <li>{{quote}}</li>
+        {{/each}}
+      </ol>
+
+      <!-- triple brackets allow for HTML to be rendered-->
+      {{{bio}}} <br/>
+
+      <!-- call a custom helper function -->
+      {{makeLink "Go to Wikipedia" "https://en.wikipedia.org/wiki/Main_Page" }}<br/>
+
+      <!-- passing attributes to a helper -->
+      {{changeColor "Make Text Red" color="red"}} <br/>
+      {{changeColor "Make Text Blue" color="blue"}} <br/>
+      {{changeColor "Make Text Green" color="green"}} <br/>
+
+      <!-- passing attributes available to all helper functions -->
+      {{sayHello}}
+
+    </script>
+
+    <script type="text/javascript">
+      // get the contents from the template
+      var source = document.querySelector('#quote-template').innerHTML
+
+      // compile the template
+      var template = Handlebars.compile(source);
+
+      // register a basic helper function
+      Handlebars.registerHelper('makeLink', function(text, url){
+        // make sure input values are safe to use
+        text = Handlebars.Utils.escapeExpression(text);
+        url = Handlebars.Utils.escapeExpression(url);
+        var theLink = '<a href="' + url + '">' + text + '</a>';
+        // use SafeString to allow HTML to be rendered
+        return new Handlebars.SafeString(theLink)
+      })
+
+      // passing attributes to helpers
+      Handlebars.registerHelper('changeColor', function(text, options) {
+        text = Handlebars.Utils.escapeExpression(text);
+        if (options.hash.color === "red") {
+          return new Handlebars.SafeString("<span class='red-text'>" + text + "</span>")
+        } else if (options.hash.color === "blue") {
+          return new Handlebars.SafeString("<span class='blue-text'>" + text + "</span>")
+        } else if (options.hash.color === "green") {
+          return new Handlebars.SafeString("<span class='green-text'>" + text + "</span>")
+        }
+      })
+
+      // helper function accessing global data object
+      Handlebars.registerHelper("sayHello", function(options) {
+        switch (options.data.lang) {
+          case "english":
+            return "Hello"
+            break;
+          case "french":
+            return "Bonjour"
+            break;
+          default:
+            return "Hello"
+        }
+      })
+
+      // execute the template with a context to get HTML
+      // second object contains data that all helpers have access to
+      var quoteData = template(
+        {
+          name: "Example Person",
+          quotes: [
+            {quote: "quote number one"},
+            {quote: "quote number two"},
+            {quote: "quote number three"},
+            {quote: "quote number four"},
+            {quote: "quote number five"},
+          ],
+          bio: "<i>This is an example bio of a person</i>"
+        },
+        {
+          data: {
+            lang: "french"
+          }
+        }
+      );
+
+    document.querySelector('#container').innerHTML += quoteData
+    </script>
+
+  </body>
+</html>
