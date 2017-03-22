@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>5 - Partials</title>
+    <script src="../lib/handlebars-v4.0.5.js" charset="utf-8"></script>
+  </head>
+
+  <body>
+    <h1>5 - Partials</h1>
+    <div id="content"></div>
+
+    <script id="template" type="text/x-handlebars-template">
+      <!-- Partials allow for code re-use -->
+      <!-- act like reusable placeholders for data, don't actually compute anything -->
+      
+      <!-- simple partial  -->
+      {{> myName}}
+
+      <!-- using a partial multiple times -->
+      <div>
+        {{>askQuestion tagName="h2"}}
+        <h2>Suggestions</h2>
+        {{#each comments}}
+          {{> askQuestion tagName="h3"}}
+        {{/each}}
+      </div>
+    </script>
+
+    <script type="text/javascript">
+      var templateInfo = document.querySelector('#template').innerHTML;
+      var template = Handlebars.compile(templateInfo);
+
+      // simple partial
+      Handlebars.registerPartial("myName", '{{name}}')
+
+      // another partial
+      Handlebars.registerPartial("askQuestion", '<{{tagName}}>{{author}}</tagName>' + '<div>{{comment}}')
+
+      var templateData = template({
+        name: "Greg",
+        author: "John",
+        comment: "Where should we vacation?",
+        comments:[{
+          author: "Sue",
+          comment: "The Beach"
+        },
+        {
+          author: "Paul",
+          comment: "The Lake"
+        }]
+      })
+      document.querySelector('#content').innerHTML += templateData
+    </script>
+
+  </body>
+</html>

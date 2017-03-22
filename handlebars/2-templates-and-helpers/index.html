@@ -19,7 +19,7 @@
     <!-- Add a template to render on the client -->
     <script id="quote-template" type="text/x-handlebars-template">
 
-      <!-- simple data input -->
+      <!-- simple data -->
       <h3>Favorite {{name}} Quotes</h3>
 
       <!-- Iterate though a list of items -->
@@ -28,6 +28,12 @@
           <li>{{quote}}</li>
         {{/each}}
       </ol>
+
+      <!-- conditional -->
+      {{#if reference}}
+        <p>reference: {{reference}}</p>
+      {{/if}}
+
 
       <!-- triple brackets allow for HTML to be rendered-->
       {{{bio}}} <br/>
@@ -40,7 +46,7 @@
       {{changeColor "Make Text Blue" color="blue"}} <br/>
       {{changeColor "Make Text Green" color="green"}} <br/>
 
-      <!-- passing attributes available to all helper functions -->
+      <!-- helper function using global data object -->
       {{sayHello}}
 
     </script>
@@ -100,6 +106,7 @@
             {quote: "quote number four"},
             {quote: "quote number five"},
           ],
+          reference: "internet",
           bio: "<i>This is an example bio of a person</i>"
         },
         {

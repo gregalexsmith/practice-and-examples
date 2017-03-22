@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>3 - Custom Block Helpers</title>
+    <script src="../lib/handlebars-v4.0.5.js" charset="utf-8"></script>
+  </head>
+
+  <body>
+    <h1>3 - Custom Block Helpers</h1>
+    <div id="content"></div>
+
+    <script id="template" type="text/x-handlebars-template">
+      <!--  create a custom block helper -->
+      {{#makeRadio "size"}}
+        Small
+        Medium
+        Large
+      {{/makeRadio}}
+      <!-- using alternative templates with custom block helpers -->
+      {{#areEqual 1 1}}
+        <p>Numbers are equal</p>
+      {{else}}
+        <p>Numbers are not equal</p>
+      {{/areEqual}}
+    </script>
+
+    <script type="text/javascript">
+      var templateInfo = document.querySelector('#template').innerHTML;
+      var template = Handlebars.compile(templateInfo);
+
+      // register a custom block helper
+      Handlebars.registerHelper("makeRadio", function(name, options) {
+        // returns a string based on data within the contents of the block helper
+        var radioData = options.fn();
+        // convert to array
+        var radioList = radioData.trim().split("\n");
+
+        // prepare and return output
+        var output = "";
+        for (var i in radioList) {
+          var item = radioList[i].trim();
+          output += '<input type="radio" name="' + name + '" id="' + item + '" value="' + item + '">'
+          output += '<label for="'+ item +'">' + item + "</label> <br />";
+        }
+        return output;
+      });
+
+      // using alternative templates
+      Handlebars.registerHelper("areEqual", function(num1, num2, options) {
+        if (num1 === num2) {
+          return options.fn(this);
+        } else {
+          return options.inverse(this);
+        }
+      });
+
+      var templateData = template({});
+      document.querySelector('#content').innerHTML += templateData
+    </script>
+
+  </body>
+</html>

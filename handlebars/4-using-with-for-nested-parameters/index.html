@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>4 - Using #with for nested parameters</title>
+    <script src="../lib/handlebars-v4.0.5.js" charset="utf-8"></script>
+  </head>
+
+  <body>
+    <h1>4 - Using #with for nested parameters</h1>
+    <div id="content"></div>
+
+    <script id="template" type="text/x-handlebars-template">
+      <div>
+        <h3>{{title}}</h3>
+        <!-- #with is a built in helper to change the context, useful for nested objects -->
+        {{#with techData}}
+          <div>{{isbn}}</div>
+          <div>{{author}}</div>
+        {{/with}}
+        <br/>
+
+        <!-- can also use #with to rename context -->
+        {{#with techData as |data|}}
+          <div>{{data.isbn}}</div>
+          <div>{{data.author}}</div>
+        {{/with}}
+        <br/>
+
+        <!-- can also use else if the object is not defined -->
+        {{#with techData as |data|}}
+          <div>{{data.isbn}}</div>
+          <div>{{data.author}}</div>
+        {{else}}
+          <div>No Content</div>
+        {{/with}}
+        <br/>
+
+      </div>
+
+    </script>
+
+    <script type="text/javascript">
+      var templateInfo = document.querySelector('#template').innerHTML;
+      var template = Handlebars.compile(templateInfo);
+
+      //This is what #with would look like
+
+      // Handlebars.registerHelper('with', function(context, options) {
+      //   //context is what we pass into the helper
+      //   return options.fn(context);
+      // })
+
+      var templateData = template({
+        title: "The Hobbit",
+        techData: {
+          isbn: "0-7475-3269-9",
+          author: "J. R. R. Tolkien"
+        }
+      });
+      document.querySelector('#content').innerHTML += templateData
+    </script>
+
+  </body>
+</html>
