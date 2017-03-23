@@ -8,38 +8,41 @@ var car = {
     console.log(this);
   }
 };
-car.drive();
 // 'this' only becomes relevent when the function is actually called
 // In this case it will refer to the car object because it is the parent object that called it.
+car.drive();
 
 
-//EXAMPLE 2
+// EXAMPLE 2
+// setup
 var car = {type: "car"},
     truck = {type: "truck"},
     bike = {type: "bike"},
     printer = {};
+
 var print = function(a, b) {
   console.log("\n\n\n")
   console.log(this, a, b)
 };
 
+// when the function is called on its own in the global scope, the interpreter will automatically assign the value of 'this' to the global object.
 print(car, truck) // RESULT: global object, {type: 'car'}, {type: 'truck'}
-//when a function is called on its own in the global scope, the interpreter will automatically assign the value of 'this' to the global object.
 
-//now assign function object 'print' to property in printer object
+// now assign function object 'print' to property in printer object
+// 'this' will now refer to the parent object (printer)
 printer.print = print;
 printer.print(car, truck);  //RESULT: {print: [f]}, {type: 'car'}, {type: 'truck'}
-//since the function is now being called as property of a parent object, 'this' will now refer to that parent object
 
 
-//EXAMPLE 3: Using 'call'
+// EXAMPLE 3: Using 'call'
+// 'call' allows a function to be run within an chosen object's scope.
+// The function will not be added to the objects properties list, but will temporarly bind 'this' to that object
 var printer2 = {name: 'printer2'};
 print.call(printer2, car, truck); //RESULT: {name: 'printer2'}, {type: 'car'}, {type: 'truck'}
-// 'call' allows a function to be run within an chosen object's scope. The function will not be added to the objects properties list, but will temporarly bind 'this' to that object
 
+// 'call' can also be used to overide the method's access rules.
+// Even though 'this' would normally be the printer object, using 'call' allows us to run the function within printer2's scope
 printer.print.call(printer2, car, truck); //RESULT: {name: 'printer2'}, {type: 'car'}, {type: 'truck'}
-// call can also be used to overide the method's access rules.
-// Even though 'this' would normally be the printer object, using 'call' allows us to run the function within the printer2 object's scope
 
 
 //EXAMPLE 4: Callback functions

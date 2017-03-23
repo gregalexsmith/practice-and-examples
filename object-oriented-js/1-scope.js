@@ -1,8 +1,9 @@
-/*
-  Creating a Lexical Scope
-*/
+// scope
+
+// create variable in global scope
 var globalVar;
-//function definiton creates a new lexical scope
+
+// function definiton creates a new lexical scope
 var myFunction1 = function() {
   var scopeVar;
   //can access both globalVar and scopeVar within this scope
@@ -14,7 +15,7 @@ var myFunction1 = function() {
   Scope tricks
 */
 var myFunction2 = function() {
-  scopeVar = "bad practice";
+  scopeVar2 = "bad practice";
   // in this case, scopeVar will actually be a global variable
   // javascript will lift all undeclared variables to the global scope automatically
 };

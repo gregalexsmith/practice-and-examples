@@ -1,7 +1,7 @@
 //Functional Super Classes
 
 //This Car class will act as a 'super class' for the next two classes.
-//NOTE: it is just like a regular class, nothing is different compared to the previous functional example.
+//NOTE: it is just like a regular class, nothing is different compared to the functional example.
 var Car = function(loc) {
   var obj = {loc: loc};
   obj.move = function() {
