@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Creational Pattern With Angular</title>
+    <script src="../lib/angular.min.js" charset="utf-8"></script>
+    <script src="main.js" charset="utf-8"></script>
+    <script src="Task.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <h1>Creational Pattern With Angular</h1>
+    <section ng-app='taskManager'>
+      <h1>Task Manager</h1>
+      <div ng-controller='taskCtrl as ctrl'>
+        <div ng-repeat='task in ctrl.tasks'>
+          <input type="checkbox" ng-checked='task.completed' ng-click='task.complete()' id="task-{{$index}}">
+          <label for="task-{{$index}}">{{task.name}}</label>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
