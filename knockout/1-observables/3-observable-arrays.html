@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <title>Knockout Observable Arrays</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Users</h1>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Index</th>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody data-bind="foreach: users">
+          <tr>
+            <td data-bind="text: $index"></td>
+            <td data-bind="text: name"></td>
+            <td><a href="#" data-bind="click: $parent.removeUser" class="btn btn-danger">Remove</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <input type="text" id="new-user">
+      <button data-bind="click: addUser" class="btn btn-primary">Add User</button>
+    </div>
+
+    <script type="text/javascript">
+      // showing a simple example of working with observable arrays
+
+      function viewModel() {
+        var self = this;
+        self.users = ko.observableArray([
+          {name: "Brad"},
+          {name: "Lisa"},
+          {name: "Sam"}
+        ])
+        self.addUser = function() {
+          self.users.push({name: $("#new-user").val()})
+        }
+        self.removeUser = function() {
+          self.users.remove(this)
+        }
+      }
+
+      // must apply bindings to the page
+      ko.applyBindings(new viewModel())
+    </script>
+  </body>
+</html>

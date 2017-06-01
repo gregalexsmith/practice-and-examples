@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <title>Knockout Observables</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+  </head>
+  <body>
+    <h1>Welcome <span data-bind="text: firstName"> </span> <span data-bind="text: lastName"></span></h1>
+    <p>Change Count: <span data-bind="text: count"></span></p>
+
+    <label>First Name</label>
+    <input type="text" data-bind="value: firstName, valueUpdate:'afterkeydown'">
+    <label>Last Name</label>
+    <input type="text" data-bind="value: lastName, valueUpdate:'afterkeydown'">
+    <button>Change</button>
+
+    <script type="text/javascript">
+      // Knockout observables detect and respond to changes on an object
+      // allows for 2 way data binding with the view
+
+      // create a simple view model
+      var viewModel = {
+        firstName: ko.observable("John"),
+        lastName: ko.observable("Doe"),
+        count: ko.observable(0)
+      }
+
+      // can update observables programatically
+      $('button').click(function() {
+        viewModel.firstName("George")
+        viewModel.lastName("Williams")
+      })
+
+      // Can also update observables through 2-Way data binding.
+      // note the inputs above are bound to firstName and lastName, will automatically update
+      // valueUpdate property can also be set to change the update event
+
+      // observables can also be subscribed to
+      // allows actions to be performed on changes of state
+      viewModel.firstName.subscribe(function(newValue) {
+        console.log("The users first name is now: " + newValue)
+        viewModel.count(viewModel.count() + 1)
+      })
+      
+      viewModel.firstName.subscribe(function(oldValue) {
+        console.log("The users first used to be: " + oldValue)
+      }, null, 'beforeChange')
+
+      // must apply bindings to the page
+      ko.applyBindings(viewModel)
+    </script>
+  </body>
+</html>
