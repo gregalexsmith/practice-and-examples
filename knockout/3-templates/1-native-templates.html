@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>Knockout Native Templates</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+
+  </head>
+  <body>
+    <ul data-bind="template: {name: 'categoryTemplate', foreach: categories, as: 'category'}"></ul>
+
+    <script type="text/html" id="categoryTemplate">
+      <li>
+        <strong data-bind="text: name"></strong>
+        <ul data-bind="template: {name: 'subcategoryTemplate', foreach: subcategories, as: 'subcategory'}">
+        </ul>
+      </li>
+    </script>
+
+    <script type="text/html" id="subcategoryTemplate">
+      <li>
+        <a data-bind="attr: {href: subcategory}">
+        <span data-bind="text: subcategory"></span></a>
+      </li>
+    </script>
+
+    <script type="text/javascript">
+      var viewModel = function() {
+        var self = this;
+        self.categories = ko.observableArray([
+          {name: "Technology", subcategories: ['Programming', 'Hardware', 'Web Development']},
+          {name: "Business", subcategories: ['Finance', 'Marketing', 'Stocks']},
+          {name: "Food", subcategories: ['Restaurant', 'Catering', 'Market']},
+          {name: "Construction", subcategories: ['Demolition', 'Carpentry', 'Electrical']}
+        ])
+      }
+      ko.applyBindings(new viewModel())
+    </script>
+  </body>
+</html>

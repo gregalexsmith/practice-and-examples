@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <title>Knockout Underscore Templates</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="./underscoreKO.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <!-- Setup with normal viewModel -->
+    <h1>Categories</h1>
+    <ul data-bind="foreach: categories">
+      <li data-bind="text: name"></li>
+    </ul>
+
+    <!-- Extend with underscoreKO union -->
+    <h1>Union</h1>
+    <ul data-bind="foreach: categoriesAlt">
+      <li data-bind="text: name"></li>
+    </ul>
+
+    <!-- add categories -->
+    <div>
+      <label for="addCategory">Add Category</label>
+      <input id="addCategory" type="text" data-bind="value: newCategory">
+      <button id="addBtn">Add Category</button>
+    </div>
+
+    <script type="text/javascript">
+      var viewModel = function() {
+        var self = this;
+        self.categories = ko.observableArray([
+          {name: "Technology"},
+          {name: "Business"}
+        ])
+        self.categoriesAlt = ko.computed(function() {
+          return self.categories.union([
+            {name: 'Food'},
+            {name: 'Construction'}
+          ]);
+        })
+        self.newCategory = ko.observable();
+      }
+
+      $(function() {
+        var vm = new viewModel()
+        ko.applyBindings(vm)
+        $('#addBtn').click(function() {
+          vm.categories.push({name: vm.newCategory()})
+        })
+      })
+    </script>
+  </body>
+</html>
