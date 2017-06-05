@@ -1,0 +1,92 @@
+<html>
+  <head>
+    <title>Knockout Observable Arrays</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+
+  </head>
+  <body>
+
+    <!-- CLICK Binding -->
+    <ul data-bind="foreach: users">
+      <li>
+        <span data-bind="text: $data"></span>
+        <button data-bind="click: $parent.removeUser">Remove</button>
+      </li>
+    </ul>
+
+    <!-- MOUSEOVER, MOUSEOUT Bindings -->
+    <div data-bind="event:{mouseover: addHover, mouseout: removeHover}">
+      Hover over me
+    </div>
+    <div data-bind="visible: isHover">
+      You are now hovering
+    </div>
+
+    <!-- VALUE Bindings -->
+    <div>Login: <input type="text" data-bind="value: userName, valueUpdate: 'afterkeydown'"></div>
+    <p>Logging In As <span data-bind="text:userName"></span></p>
+
+    <!-- CHECKED Binding -->
+    <div>My Checkbox <input type="checkbox" data-bind="checked: checkIt"></div>
+    <button type="button" data-bind="click: checkIt(!checkIt())">CheckIt</button>
+
+    <!-- SUBMIT Binding -->
+    <div data-bind="text: submitMessage"></div>
+    <form data-bind="submit: doSubmit">
+      <button type="submit" >Submit</button>
+    </form>
+
+    <!-- ENABLE DISABLE Binding -->
+    <div>
+      <input type="checkbox" data-bind="checked: isCompany"> Register Under a Company
+    </div>
+    <div>
+      Your Name: <input type="text" data-bind="value: yourName, disable: isCompany">
+    </div>
+    <div>
+      Company Name: <input type="text" data-bind="value: companyName, enable: isCompany">
+    </div>
+
+    <script type="text/javascript">
+      var viewModel = function() {
+        var self = this;
+
+        // CLICK Binding
+        self.users = ko.observableArray(['John', 'Nancy', 'Dave'])
+        self.removeUser = function(user) {
+          self.users.remove(user)
+        }
+
+        // MOUSEOVER, MOUSEOUT Bindings
+        self.isHover = ko.observable(false),
+        self.addHover = function() {
+          self.isHover(true)
+        }
+        self.removeHover = function() {
+          self.isHover(false)
+        }
+
+        // VALUE Bindings
+        self.userName = ko.observable();
+
+        // CHECKED Binding
+        self.checkIt = ko.observable(true);
+
+        // SUBMIT Binding
+        self.submitMessage = ko.observable();
+        self.doSubmit = function() {
+          self.submitMessage("Form Submitted")
+        }
+
+        // ENABLE DISABLE Binding
+        self.isCompany = ko.observable(false);
+        self.companyName = ko.observable("")
+        self.yourName = ko.observable("")
+      }
+
+      // must apply bindings to the page
+      ko.applyBindings(new viewModel())
+    </script>
+  </body>
+</html>

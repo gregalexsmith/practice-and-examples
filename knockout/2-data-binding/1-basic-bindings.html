@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <title>Knockout Observable Arrays</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+    <style>
+      .highAmount{color: red;}
+    </style>
+  </head>
+  <body>
+    <!-- TEXT BINDING -->
+    <p>Hello my name is <span data-bind="text: name"></span> and I am a  <span data-bind="text: job"></span></p>
+
+    <!-- VISIBLE BINDING -->
+    <p data-bind="visible: isVisible">Here is a message</p>
+    <button data-bind="click: showMessage, visible: !isVisible()">Show Message</button>
+    <button data-bind="click: hideMessage, visible: isVisible">Hide Message</button>
+
+    <!-- HTML BINDING -->
+    <div data-bind="html: htmlString"></div>
+
+
+    <!-- CSS BINDING -->
+    <div data-bind="css: {highAmount: amount() > 10}">Some Amount</div>
+
+    <!-- STYLE BINDING -->
+    <div data-bind="style: {color: amount() > 12 ? 'red' : 'blue'}">Some Other Amount</div>
+
+    <!-- ATTR BINDING -->
+    <a data-bind="attr: {href: url, title: details}">About Us</a>
+
+    <script type="text/javascript">
+      var viewModel = function() {
+        // text binding
+        this.name = ko.observable('Joe')
+        this.job = ko.observable('Web Developer')
+
+        // visible binding
+        this.isVisible = ko.observable(false)
+        this.showMessage = function() {this.isVisible(true)}
+        this.hideMessage = function() {this.isVisible(false)}
+
+        // html binding
+        this.htmlString = ko.observable();
+        this.htmlString("<h3>This is a html heading</h3><p>This is a paragraph</p>");
+
+        // css binding + style binding
+        this.amount = ko.observable(11);
+
+        // attr binding
+        this.url = ko.observable('about.html');
+        this.details = ko.observable('Read More About Us');
+      }
+
+      // must apply bindings to the page
+      ko.applyBindings(new viewModel())
+    </script>
+  </body>
+</html>

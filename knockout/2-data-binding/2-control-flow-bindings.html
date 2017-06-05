@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <title>Knockout Observable Arrays</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+
+  </head>
+  <body>
+
+    <!-- FOREACH and IF Bindings -->
+    <ul data-bind="foreach: employees">
+      <!-- ko if: id -->
+      <li>
+        <span data-bind="text: id"></span>
+        <span data-bind="text: name"></span>
+      </li>
+      <!-- /ko -->
+    </ul>
+
+    <ul data-bind="foreach: customers">
+      <!-- using $data -->
+      <li data-bind="if $data">
+        <span data-bind="text: $data"></span>
+      </li>
+    </ul>
+
+    <!-- WITH Binding -->
+    <h5 data-bind="text: city"></h5>
+    <p data-bind="with: coords">
+      Latitude: <span data-bind="text: lat"></span>
+      Longitude: <span data-bind="text: lon"></span>
+    </p>
+
+
+    <script type="text/javascript">
+      var viewModel = function() {
+        // FOREACH and IF bindings
+        this.employees = ko.observableArray([
+          {id:"e100", name:"Tom"},
+          {id:null, name:"Janice"},
+          {id:"e102", name:"Paul"}
+        ])
+        this.customers = ko.observableArray(["Bob", "Sam", "John"])
+
+        // WITH binding
+        this.city = "Boston";
+        this.coords = {
+          lat: 42.3601,
+          lon: 71.0589
+        }
+      }
+
+      // must apply bindings to the page
+      ko.applyBindings(new viewModel())
+    </script>
+  </body>
+</html>

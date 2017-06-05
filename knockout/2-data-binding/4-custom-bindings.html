@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <title>Knockout Observable Arrays</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+
+  </head>
+  <body>
+    <!-- CUSTOM changeColor Binding -->
+    <h1 data-bind="changeColor: color">ChangeColor Example</h1>
+    <select data-bind="value: color">
+      <option value="black">Choose Color</option>
+      <option value="red">Red</option>
+      <option value="blue">Blue</option>
+      <option value="green">Green</option>
+      <option value="yellow">Yellow</option>
+    </select>
+
+    <!-- CUSTOM textFadeIn Binding -->
+    <h1 data-bind="textFadeIn: msg"></h1>
+    <div><input type="text" data-bind="value: msg"></div>
+
+    <!-- CUSTOM slideVisible Binding -->
+    <div data-bind="slideVisible: giftWrap, slideDuration:600">You have selected the option</div>
+    <label><input type="checkbox" data-bind="checked: giftWrap" /> Gift wrap</label>
+
+
+    <script type="text/javascript">
+
+      // CUSTOM changeColor Binding
+      ko.bindingHandlers.changeColor = {
+        update: function(element, valueAccessor) {
+          var element = $(element);
+          var value = valueAccessor();
+          var valUnwrap = ko.unwrap(value);
+          element.css('color', valUnwrap)
+        }
+      }
+
+      // CUSTOM textFadeIn Binding
+      ko.bindingHandlers.textFadeIn = {
+        update: function(element, valueAccessor) {
+          $(element).hide();
+          ko.bindingHandlers.text.update(element, valueAccessor);
+          $(element).fadeIn();
+        }
+      }
+
+      // CUSTOM slideVisible Binding
+      ko.bindingHandlers.slideVisible = {
+        init: function(element, valueAccessor) {
+          var value = ko.unwrap(valueAccessor());
+          $(element).toggle(value);
+        },
+        update: function(element, valueAccessor, allBindings) {
+          var value = valueAccessor();
+          var valueUnwrapped = ko.unwrap(value);
+          var duration = allBindings.get('slideDuration') || 400;
+          if (valueUnwrapped == true)
+            $(element).slideDown(duration);
+          else
+            $(element).slideUp(duration);
+        }
+      };
+
+      var viewModel = function() {
+        var self = this;
+        // CUSTOM changeColor Binding
+        self.color = ko.observable();
+
+        // CUSTOM textFadeIn Binding
+        self.msg = ko.observable("Text FadeIn Example");
+
+        // CUSTOM changeColor Binding
+        self.giftWrap = ko.observable(true)
+      }
+
+      ko.applyBindings(new viewModel())
+    </script>
+  </body>
+</html>
