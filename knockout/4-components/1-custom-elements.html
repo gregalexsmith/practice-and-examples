@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>Knockout Native Templates</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+
+  </head>
+  <body>
+    <!-- Using Custom Elements -->
+    <newsletter-widget></newsletter-widget>
+
+    </br></br>
+
+    <!-- Using Component Binding -->
+    <div data-bind="component: 'newsletter-widget'"></div>
+
+    <script type="text/javascript">
+     // Register the custom element
+      ko.components.register('newsletter-widget', {
+        viewModel: function() {
+          this.email = ko.observable();
+          this.showMessage = ko.observable(false);
+          this.submitForm = function() {
+            this.showMessage(true);
+          }
+        },
+        template: '<h3>Subscribe To Our Newsletter</h3>\
+        <form data-bind="submit: submitForm">\
+          <input data-bind="value: email">\
+          <button type="submit">Submit</button>\
+        </form>\
+        <p data-bind="visible: showMessage">Thanks For Subscribing:   <br><strong><span data-bind="text: email"></span></strong>\
+        </p>'
+      })
+
+      ko.applyBindings()
+    </script>
+  </body>
+</html>
