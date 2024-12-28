@@ -2,6 +2,7 @@ import { Background, ReactFlow, ReactFlowProvider } from "@xyflow/react";
 import { shallow } from "zustand/shallow";
 import { State, useStore } from "./store";
 import Osc from "./nodes/Osc";
+import Gain from "./nodes/Gain";
 
 const selector = (store: State) => ({
   nodes: store.nodes,
@@ -13,6 +14,7 @@ const selector = (store: State) => ({
 
 const nodeTypes = {
   osc: Osc,
+  gain: Gain,
 };
 
 export const WebAudioExample = () => {

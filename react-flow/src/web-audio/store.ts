@@ -13,11 +13,13 @@ import { createWithEqualityFn } from "zustand/traditional";
 export type State = {
   nodes: Node[];
   edges: Edge[];
+  isRunning: boolean;
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
   addEdge: (connection: Connection) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateNode: (id: string, data: any) => void;
+  toggleAudio: () => void;
 };
 
 export const useStore = createWithEqualityFn<State>((set, get) => ({
@@ -31,8 +33,18 @@ export const useStore = createWithEqualityFn<State>((set, get) => ({
       data: { frequency: 220, type: "square" },
       position: { x: 0, y: 0 },
     },
+    {
+      type: "gain",
+      id: "b",
+      data: { gain: 0.5 },
+      position: { x: 50, y: 50 },
+    },
   ],
   edges: [],
+  isRunning: false,
+  toggleAudio() {
+    set({ isRunning: !get().isRunning });
+  },
 
   updateNode(id, data) {
     set({
