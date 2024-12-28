@@ -12,7 +12,7 @@ import {
 
 import { initialNodes, nodeTypes, initialEdges, edgeTypes } from './data';
 
-export default function StarterExample() {
+export function StarterExample() {
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const onConnect: OnConnect = useCallback(

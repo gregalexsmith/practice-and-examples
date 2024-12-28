@@ -1,30 +1,40 @@
-import { useState } from 'react';
-import StarterExample from './starter-example';
+import { Link, Routes, Route } from 'react-router';
+import { WebAudioExample } from './web-audio';
+import { StarterExample } from './starter-example';
 
-const examples = {
-  starter: StarterExample,
-} as const;
-
-type Example = keyof typeof examples;
+const exampleRoutes = [
+  {
+    path: '/',
+    label: 'Starter',
+    element: <StarterExample />,
+  },
+  {
+    path: '/web-audio',
+    label: 'Web Audio',
+    element: <WebAudioExample />,
+  },
+];
 
 export default function App() {
-  const [example, setExample] = useState<Example>('starter');
-
   return (
     <div className="">
       <div className="flex items-center justify-center gap-2 my-4">
-        {Object.keys(examples).map((example) => (
-          <button
-            key={example}
-            onClick={() => setExample(example as Example)}
-            className="bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 p-2 rounded-md"
+        {exampleRoutes.map((example) => (
+          <Link
+            key={example.path}
+            to={example.path}
+            className="text-neutral-800 dark:text-neutral-200 p-2 rounded-md cursor-pointer hover:underline"
           >
-            {example}
-          </button>
+            {example.label}
+          </Link>
         ))}
       </div>
       <div className="h-[60vh] w-[80vw] mx-auto mt-10">
-        {examples[example]()}
+        <Routes>
+          {exampleRoutes.map((example) => (
+            <Route key={example.path} path={example.path} element={example.element} />
+          ))}
+        </Routes>
       </div>
     </div>
   );
