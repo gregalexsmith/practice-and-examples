@@ -1,24 +1,32 @@
 @import "tailwindcss";
 @import "@xyflow/react/dist/style.css";
 
+@layer utilities {
+  .bg-surface {
+    @apply bg-neutral-100 dark:bg-neutral-900;
+  }
+
+  .bg-surface-raised {
+    @apply bg-neutral-50 dark:bg-neutral-800;
+  }
+}
+
 html,
 body,
 #root {
-  @apply bg-neutral-200 dark:bg-neutral-900;
+  @apply bg-neutral-100 dark:bg-neutral-900;
+  @apply text-neutral-900 dark:text-neutral-100;
 }
 
+/* React Flow specific dark mode class */
 .dark {
-  & .react-flow__node,
   & .react-flow__node-default {
-    background: #111;
-    color: white;
+    @apply bg-neutral-800 text-white;
   }
 }
 
 .light {
-  & .react-flow__node,
   & .react-flow__node-default {
-    background: white;
-    color: #111;
+    @apply bg-neutral-50 text-neutral-900;
   }
 }
