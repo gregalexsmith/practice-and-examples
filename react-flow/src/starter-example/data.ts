@@ -1,5 +1,4 @@
-import type { NodeTypes } from '@xyflow/react';
-
+import type { NodeTypes, EdgeTypes, Edge } from '@xyflow/react';
 import { PositionLoggerNode } from './PositionLoggerNode';
 import { AppNode } from './types';
 
@@ -24,3 +23,15 @@ export const nodeTypes = {
   'position-logger': PositionLoggerNode,
   // Add any of your custom nodes here!
 } satisfies NodeTypes;
+
+
+
+export const initialEdges: Edge[] = [
+  { id: 'a->c', source: 'a', target: 'c', animated: true },
+  { id: 'b->d', source: 'b', target: 'd' },
+  { id: 'c->d', source: 'c', target: 'd', animated: true },
+];
+
+export const edgeTypes = {
+  // Add your custom edge types here!
+} satisfies EdgeTypes;
