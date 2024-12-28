@@ -1,16 +1,16 @@
-import { Link, Routes, Route } from 'react-router';
-import { WebAudioExample } from './web-audio';
-import { StarterExample } from './starter-example';
+import { Link, Routes, Route } from "react-router";
+import { WebAudioExample } from "./web-audio";
+import { StarterExample } from "./starter-example";
 
 const exampleRoutes = [
   {
-    path: '/',
-    label: 'Starter',
+    path: "/",
+    label: "Starter",
     element: <StarterExample />,
   },
   {
-    path: '/web-audio',
-    label: 'Web Audio',
+    path: "/web-audio",
+    label: "Web Audio",
     element: <WebAudioExample />,
   },
 ];
@@ -32,7 +32,11 @@ export default function App() {
       <div className="h-[60vh] w-[80vw] mx-auto mt-10">
         <Routes>
           {exampleRoutes.map((example) => (
-            <Route key={example.path} path={example.path} element={example.element} />
+            <Route
+              key={example.path}
+              path={example.path}
+              element={example.element}
+            />
           ))}
         </Routes>
       </div>

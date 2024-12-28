@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback } from "react";
 import {
   ReactFlow,
   Background,
@@ -8,16 +8,16 @@ import {
   useNodesState,
   useEdgesState,
   type OnConnect,
-} from '@xyflow/react';
+} from "@xyflow/react";
 
-import { initialNodes, nodeTypes, initialEdges, edgeTypes } from './data';
+import { initialNodes, nodeTypes, initialEdges, edgeTypes } from "./data";
 
 export function StarterExample() {
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const onConnect: OnConnect = useCallback(
     (connection) => setEdges((edges) => addEdge(connection, edges)),
-    [setEdges]
+    [setEdges],
   );
 
   return (
