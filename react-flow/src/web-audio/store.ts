@@ -9,24 +9,33 @@ import {
 } from "@xyflow/react";
 import { nanoid } from "nanoid";
 import { createWithEqualityFn } from "zustand/traditional";
+import {
+  connect,
+  disconnect,
+  isRunning,
+  removeAudioNode,
+  toggleAudio,
+  updateAudioNode,
+} from "./audio";
 
 export type State = {
   nodes: Node[];
   edges: Edge[];
   isRunning: boolean;
+  toggleAudio: () => void;
+
   onNodesChange: (changes: NodeChange[]) => void;
-  onEdgesChange: (changes: EdgeChange[]) => void;
-  addEdge: (connection: Connection) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateNode: (id: string, data: any) => void;
-  toggleAudio: () => void;
+  removeNodes: (nodes: Node[]) => void;
+
+  onEdgesChange: (changes: EdgeChange[]) => void;
+  addEdge: (connection: Connection) => void;
+  onEdgesDelete: (edges: Edge[]) => void;
 };
 
 export const useStore = createWithEqualityFn<State>((set, get) => ({
   nodes: [
-    { id: "a", data: { label: "oscillator" }, position: { x: 0, y: 0 } },
-    { id: "b", data: { label: "gain" }, position: { x: 50, y: 50 } },
-    { id: "c", data: { label: "output" }, position: { x: -50, y: 100 } },
     {
       type: "osc",
       id: "a",
@@ -39,14 +48,24 @@ export const useStore = createWithEqualityFn<State>((set, get) => ({
       data: { gain: 0.5 },
       position: { x: 50, y: 50 },
     },
+    {
+      type: "out",
+      id: "c",
+      data: {},
+      position: { x: -50, y: 100 },
+    },
   ],
   edges: [],
-  isRunning: false,
+  isRunning: isRunning(),
+
   toggleAudio() {
-    set({ isRunning: !get().isRunning });
+    toggleAudio().then(() => {
+      set({ isRunning: isRunning() });
+    });
   },
 
   updateNode(id, data) {
+    updateAudioNode(id, data);
     set({
       nodes: get().nodes.map((node) =>
         node.id === id ? { ...node, data: { ...node.data, ...data } } : node,
@@ -60,10 +79,10 @@ export const useStore = createWithEqualityFn<State>((set, get) => ({
     });
   },
 
-  onEdgesChange(changes: EdgeChange[]) {
-    set({
-      edges: applyEdgeChanges(changes, get().edges),
-    });
+  removeNodes(nodes: Node[]) {
+    for (const { id } of nodes) {
+      removeAudioNode(id);
+    }
   },
 
   addEdge(connection: Connection) {
@@ -71,5 +90,18 @@ export const useStore = createWithEqualityFn<State>((set, get) => ({
     const edge: Edge = { id, ...connection };
 
     set({ edges: [edge, ...get().edges] });
+    connect(connection.source, connection.target);
+  },
+
+  onEdgesChange(changes: EdgeChange[]) {
+    set({
+      edges: applyEdgeChanges(changes, get().edges),
+    });
+  },
+
+  onEdgesDelete(edges: Edge[]) {
+    for (const { id } of edges) {
+      disconnect(id);
+    }
   },
 }));
