@@ -16,6 +16,29 @@ nodes.set("b", amp);
 nodes.set("c", out);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function createAudioNode(id: string, type: string, data: any) {
+  switch (type) {
+    case "osc": {
+      const node = context.createOscillator();
+      node.frequency.value = data.frequency;
+      node.type = data.type;
+      node.start();
+
+      nodes.set(id, node);
+      break;
+    }
+
+    case "amp": {
+      const node = context.createGain();
+      node.gain.value = data.gain;
+
+      nodes.set(id, node);
+      break;
+    }
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function updateAudioNode(id: string, data: any) {
   const node = nodes.get(id);
 

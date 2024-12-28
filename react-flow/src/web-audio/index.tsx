@@ -1,4 +1,4 @@
-import { Background, ReactFlow, ReactFlowProvider } from "@xyflow/react";
+import { Background, Panel, ReactFlow, ReactFlowProvider } from "@xyflow/react";
 import { shallow } from "zustand/shallow";
 import { State, useStore } from "./store";
 import Osc from "./nodes/Osc";
@@ -13,6 +13,7 @@ const selector = (store: State) => ({
   onEdgesChange: store.onEdgesChange,
   addEdge: store.addEdge,
   onEdgesDelete: store.onEdgesDelete,
+  createNode: store.createNode,
 });
 
 const nodeTypes = {
@@ -25,6 +26,10 @@ export const WebAudioExample = () => {
   const store = useStore(selector, shallow);
   return (
     <ReactFlowProvider>
+      <Panel position="top-right">
+        <button onClick={() => store.createNode("osc")}>Osc</button>
+        <button onClick={() => store.createNode("amp")}>Amp</button>
+      </Panel>
       <ReactFlow
         nodes={store.nodes}
         nodeTypes={nodeTypes}

@@ -11,6 +11,7 @@ import { nanoid } from "nanoid";
 import { createWithEqualityFn } from "zustand/traditional";
 import {
   connect,
+  createAudioNode,
   disconnect,
   isRunning,
   removeAudioNode,
@@ -18,12 +19,15 @@ import {
   updateAudioNode,
 } from "./audio";
 
+type NodeType = "osc" | "amp";
+
 export type State = {
   nodes: Node[];
   edges: Edge[];
   isRunning: boolean;
   toggleAudio: () => void;
 
+  createNode: (type: NodeType) => void;
   onNodesChange: (changes: NodeChange[]) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateNode: (id: string, data: any) => void;
@@ -62,6 +66,32 @@ export const useStore = createWithEqualityFn<State>((set, get) => ({
     toggleAudio().then(() => {
       set({ isRunning: isRunning() });
     });
+  },
+
+  createNode(type: NodeType) {
+    const id = nanoid();
+
+    switch (type) {
+      case "osc": {
+        const data = { frequency: 440, type: "sine" };
+        const position = { x: 0, y: 0 };
+
+        createAudioNode(id, type, data);
+        set({ nodes: [...get().nodes, { id, type, data, position }] });
+
+        break;
+      }
+
+      case "amp": {
+        const data = { gain: 0.5 };
+        const position = { x: 0, y: 0 };
+
+        createAudioNode(id, type, data);
+        set({ nodes: [...get().nodes, { id, type, data, position }] });
+
+        break;
+      }
+    }
   },
 
   updateNode(id, data) {
