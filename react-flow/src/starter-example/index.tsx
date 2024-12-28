@@ -9,7 +9,6 @@ import {
   useEdgesState,
   type OnConnect,
 } from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
 
 import { initialNodes, nodeTypes, initialEdges, edgeTypes } from './data';
 
@@ -31,6 +30,7 @@ export default function StarterExample() {
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       fitView
+      colorMode="system"
     >
       <Background />
       <MiniMap />
