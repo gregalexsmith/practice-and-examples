@@ -26,6 +26,8 @@ const selector = (state: RFState) => ({
   onNodesChange: state.onNodesChange,
   onEdgesChange: state.onEdgesChange,
   addChildNode: state.addChildNode,
+  updateNodeMode: state.updateNodeMode,
+  updateNodeLabel: state.updateNodeLabel,
 });
 
 const nodeTypes = {
@@ -42,9 +44,14 @@ const defaultEdgeOptions = { style: connectionLineStyle, type: "mindmap" };
 
 function Flow() {
   // whenever you use multiple values, you should use shallow for making sure that the component only re-renders when one of the values change
-  const { nodes, edges, onNodesChange, onEdgesChange, addChildNode } = useStore(
-    useShallow(selector),
-  );
+  const {
+    nodes,
+    edges,
+    onNodesChange,
+    onEdgesChange,
+    addChildNode,
+    updateNodeMode,
+  } = useStore(useShallow(selector));
   const connectingNodeId = useRef<string | null>(null);
   const store = useStoreApi();
   const { screenToFlowPosition } = useReactFlow();
@@ -57,8 +64,6 @@ function Flow() {
 
     if (
       !domNode ||
-      // we need to check if these properties exist, because when a node is not initialized yet,
-      // it doesn't have a positionAbsolute nor a width or height
       !parentNode?.internals.positionAbsolute ||
       !parentNode?.measured.width ||
       !parentNode?.measured.height
@@ -69,22 +74,23 @@ function Flow() {
     const isTouchEvent = "touches" in event;
     const x = isTouchEvent ? event.touches[0].clientX : event.clientX;
     const y = isTouchEvent ? event.touches[0].clientY : event.clientY;
-    // we need to remove the wrapper bounds, in order to get the correct mouse position
+
+    // Convert screen coordinates to flow coordinates
     const panePosition = screenToFlowPosition({
       x,
       y,
     });
 
-    // we are calculating with positionAbsolute here because child nodes are positioned relative to their parent
+    // Calculate position relative to parent node, accounting for nodeOrigin
     return {
       x:
         panePosition.x -
-        parentNode.internals.positionAbsolute.x +
-        parentNode.measured.width / 2,
+        parentNode.internals.positionAbsolute.x -
+        parentNode.measured.width * nodeOrigin[0],
       y:
         panePosition.y -
-        parentNode.internals.positionAbsolute.y +
-        parentNode.measured.height / 2,
+        parentNode.internals.positionAbsolute.y -
+        parentNode.measured.height * nodeOrigin[1],
     };
   };
 
@@ -100,15 +106,18 @@ function Flow() {
       );
       const node = (event.target as Element).closest(".react-flow__node");
 
-      if (node) {
-        node.querySelector("input")?.focus({ preventScroll: true });
-      } else if (targetIsPane && connectingNodeId.current) {
+      console.log({ node });
+
+      if (targetIsPane && connectingNodeId.current) {
         const parentNode = nodeLookup.get(connectingNodeId.current);
         const childNodePosition = getChildNodePosition(event, parentNode);
 
         if (parentNode && childNodePosition) {
           addChildNode(parentNode, childNodePosition);
         }
+      } else if (connectingNodeId.current) {
+        console.log("connectingNodeId.current", connectingNodeId.current);
+        updateNodeMode(connectingNodeId.current, "edit");
       }
     },
     [getChildNodePosition],

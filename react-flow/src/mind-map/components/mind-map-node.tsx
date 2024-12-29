@@ -1,18 +1,19 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import useStore from "../store";
 
 export type IMindMapNode = Node<
   {
     label: string;
+    mode: "edit" | "view";
   },
   "mindmap"
 >;
 
 export function MindMapNode({ id, data }: NodeProps<IMindMapNode>) {
-  const [mode, setMode] = useState<"edit" | "view">("view");
   const inputRef = useRef<HTMLInputElement>(null);
   const updateNodeLabel = useStore((state) => state.updateNodeLabel);
+  const updateNodeMode = useStore((state) => state.updateNodeMode);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     updateNodeLabel(id, event.target.value);
@@ -20,7 +21,7 @@ export function MindMapNode({ id, data }: NodeProps<IMindMapNode>) {
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      setMode("view");
+      updateNodeMode(id, "view");
     }
   };
 
@@ -40,20 +41,17 @@ export function MindMapNode({ id, data }: NodeProps<IMindMapNode>) {
               </svg>
             </div>
           </div>
-          {mode === "edit" ? (
+          {data.mode === "edit" ? (
             <input
               ref={inputRef}
               defaultValue={data.label}
-              className="nodrag"
-              autoFocus
-              onBlur={() => setMode("view")}
+              className="nodrag pointer-events-auto"
+              onBlur={() => updateNodeMode(id, "view")}
               onChange={onChange}
               onKeyDown={onKeyDown}
             />
           ) : (
-            <div className="leading-none" onDoubleClick={() => setMode("edit")}>
-              {data.label}
-            </div>
+            <div className="leading-none">{data.label}</div>
           )}
         </>
       </div>

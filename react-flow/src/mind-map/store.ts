@@ -19,6 +19,7 @@ export type RFState = {
   onEdgesChange: OnEdgesChange;
   addChildNode: (parentNode: Node, position: XYPosition) => void;
   updateNodeLabel: (nodeId: string, label: string) => void;
+  updateNodeMode: (nodeId: string, mode: "edit" | "view") => void;
 };
 
 const useStore = createWithEqualityFn<RFState>((set, get) => ({
@@ -26,7 +27,7 @@ const useStore = createWithEqualityFn<RFState>((set, get) => ({
     {
       id: "root",
       type: "mindmap",
-      data: { label: "React Flow Mind Map" },
+      data: { label: "React Flow Mind Map", mode: "edit" },
       position: { x: 0, y: 0 },
     },
   ],
@@ -45,7 +46,7 @@ const useStore = createWithEqualityFn<RFState>((set, get) => ({
     const newNode = {
       id: nanoid(),
       type: "mindmap",
-      data: { label: "New Node" },
+      data: { label: "New Node", mode: "edit" },
       position,
       parentNode: parentNode.id,
     };
@@ -67,7 +68,16 @@ const useStore = createWithEqualityFn<RFState>((set, get) => ({
         if (node.id === nodeId) {
           node.data = { ...node.data, label };
         }
-
+        return node;
+      }),
+    });
+  },
+  updateNodeMode: (nodeId: string, mode: "edit" | "view") => {
+    set({
+      nodes: get().nodes.map((node) => {
+        if (node.id === nodeId) {
+          node.data = { ...node.data, mode };
+        }
         return node;
       }),
     });
