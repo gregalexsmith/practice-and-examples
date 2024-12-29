@@ -1,0 +1,18 @@
+.mind-map {
+  & .react-flow__handle.target {
+    top: 50%;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  & .react-flow__handle.source {
+    top: 0;
+    left: 0;
+    transform: none;
+    height: 100%;
+    width: 100%;
+    border: none;
+    background-color: var(--color-orange-400);
+    border-radius: 2px;
+  }
+}

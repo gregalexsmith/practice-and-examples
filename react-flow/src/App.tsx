@@ -1,6 +1,7 @@
 import { Link, Routes, Route } from "react-router";
 import { WebAudioExample } from "./web-audio";
 import { StarterExample } from "./starter-example";
+import { MindMap } from "./mind-map";
 
 const exampleRoutes = [
   {
@@ -12,6 +13,11 @@ const exampleRoutes = [
     path: "/web-audio",
     label: "Web Audio",
     element: <WebAudioExample />,
+  },
+  {
+    path: "/mind-map",
+    label: "Mind Map",
+    element: <MindMap />,
   },
 ];
 
